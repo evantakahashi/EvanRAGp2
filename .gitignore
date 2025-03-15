@@ -1,0 +1,13 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.env
+
+# Next.js
+.next/
+node_modules/
+
+# Build outputs
+out/
+build/
