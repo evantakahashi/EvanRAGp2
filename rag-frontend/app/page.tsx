@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
+import Image from 'next/image';
 
 interface Message {
   role: 'user' | 'assistant' | 'system';
@@ -18,7 +19,7 @@ export default function Home() {
   const [apiStatus, setApiStatus] = useState('connected'); // default to connected to avoid UI issues
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const typingSpeed = 10; // ms per character
-  const [showResumePopup, setShowResumePopup] = useState(false); // State for resume popup
+  const [showResumePopup, setShowResumePopup] = useState(false); // state for resume popup
 
   // animation keyframes
   const slideInRight = `
@@ -60,12 +61,10 @@ export default function Home() {
     }
   `;
 
-  // Custom colors
   const navyBlue = 'rgb(29, 53, 87)'; // navy blue
   const navyBlueHover = 'rgb(40, 67, 107)'; // lighter navy blue when hovering
   const navyBlueDisabled = 'rgb(141, 153, 174)'; // when disabled
   const lightBlue = 'rgb(69, 123, 157)'; // Light blue for accents
-  const paleBlue = 'rgb(230, 235, 245)'; // Very light blue for backgrounds
 
   // to scroll to bottom of messages
   const scrollToBottom = () => {
@@ -76,9 +75,9 @@ export default function Home() {
     scrollToBottom();
   }, [messages]);
 
-  // Typing effect for assistant messages
+  // typing effect for assistant messages
   const simulateTyping = (fullText: string) => {
-    // Add a placeholder message with empty content and isTyping flag
+    // add a placeholder message with empty content and isTyping flag
     setMessages(prev => [...prev, { role: 'assistant', content: '', isTyping: true }]);
     
     let i = 0;
@@ -87,7 +86,7 @@ export default function Home() {
         setMessages(prev => {
           const newMessages = [...prev];
           const lastIndex = newMessages.length - 1;
-          // Update the last message's content character by character
+          // update the last message's content character by character
           newMessages[lastIndex] = {
             ...newMessages[lastIndex],
             content: fullText.substring(0, i + 1)
@@ -96,7 +95,7 @@ export default function Home() {
         });
         i++;
       } else {
-        // Typing complete, remove the typing flag
+        // typing complete, remove the typing flag
         setMessages(prev => {
           const newMessages = [...prev];
           const lastIndex = newMessages.length - 1;
@@ -112,7 +111,7 @@ export default function Home() {
     }, typingSpeed);
   };
 
-  // Check if API is available on component mount
+  // check if API is available on component mount
   useEffect(() => {
     const checkApiStatus = async () => {
       try {
@@ -153,10 +152,10 @@ export default function Home() {
     setInput('');
     setLoading(true);
     
-    // Add user message to chat
+    // add user message to chat
     setMessages(prev => [...prev, { role: 'user', content: userMessage }]);
     
-    // Add thinking indicator
+    // add thinking indicator
     setMessages(prev => [...prev, { role: 'assistant', content: 'Thinking...', isThinking: true }]);
     
     try {
@@ -169,8 +168,8 @@ export default function Home() {
         body: JSON.stringify({ 
           question: userMessage,
           chat_history: messages
-            .filter(msg => !msg.isThinking) // Filter out thinking messages
-            .slice(-10) // Get last 10 messages for context
+            .filter(msg => !msg.isThinking) // filter out thinking messages
+            .slice(-10) // get last 10 messages for context
             .map(msg => ({
               role: msg.role === 'assistant' ? 'assistant' : 'user',
               content: msg.content
@@ -185,16 +184,16 @@ export default function Home() {
 
       const data = await response.json();
       
-      // Remove thinking indicator
+      // remove thinking indicator
       setMessages(prev => prev.filter(msg => !msg.isThinking));
       
-      // Use typing effect for assistant response
+      // use typing effect for assistant response
       simulateTyping(data.answer);
     } catch (err) {
-      // Remove thinking indicator
+      // remove thinking indicator
       setMessages(prev => prev.filter(msg => !msg.isThinking));
       
-      // Add error message to chat
+      // add error message to chat
       setMessages(prev => [...prev, {
         role: 'system',
         content: `Error: ${err instanceof Error ? err.message : String(err)}`
@@ -205,47 +204,9 @@ export default function Home() {
     }
   };
 
-  const handleIngest = async () => {
-    setLoading(true);
-    setMessages(prev => [...prev, {
-      role: 'system',
-      content: 'Ingesting documents from ./documents folder...'
-    }]);
-    
-    try {
-      const response = await fetch('http://localhost:8000/ingest', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
-        },
-        body: JSON.stringify({ directory_path: './documents' }),
-      });
-
-      if (!response.ok) {
-        const errorText = await response.text();
-        throw new Error(`Error ${response.status}: ${errorText}`);
-      }
-
-      const data = await response.json();
-      setMessages(prev => [...prev, {
-        role: 'system',
-        content: `${data.message}`
-      }]);
-    } catch (err) {
-      setMessages(prev => [...prev, {
-        role: 'system',
-        content: `Failed to ingest documents: ${err instanceof Error ? err.message : String(err)}`
-      }]);
-      console.error('Ingest error:', err);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  // Function to handle keyboard shortcuts
+  // function to handle keyboard shortcuts
   const handleKeyDown = (e: React.KeyboardEvent) => {
-    // Submit on Enter (without Shift)
+    // submit on Enter (without Shift)
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
       if (input.trim() && !loading && apiStatus === 'connected') {
@@ -308,7 +269,7 @@ export default function Home() {
                 }}
                 onClick={() => {
                   navigator.clipboard.writeText('etakahashi@scu.edu');
-                  // Show a temporary confirmation message
+                  // show a temporary confirmation message
                   const button = document.activeElement as HTMLButtonElement;
                   const originalText = button.innerHTML;
                   button.innerHTML = `
@@ -404,12 +365,14 @@ export default function Home() {
             >
               {message.role !== 'user' && (
                 <div className="flex-shrink-0 mr-2 self-center">
-                  <img 
+                  <Image 
                     src="/evan.jpg" 
                     alt="Evan" 
+                    width={36}
+                    height={36}
                     className="w-9 h-9 rounded-full object-cover border border-blue-200"
                     onError={(e) => {
-                      // Fallback to default icon if image fails to load
+                      // fallback to default icon if image fails to load
                       const target = e.target as HTMLImageElement;
                       target.onerror = null;
                       target.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' className='h-5 w-5 text-blue-600' viewBox='0 0 20 20' fill='%233B82F6'%3E%3Cpath fillRule='evenodd' d='M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z' clipRule='evenodd' /%3E%3C/svg%3E";
@@ -544,11 +507,11 @@ export default function Home() {
                 }}
                 className="flex items-center justify-center w-10 h-10 text-white rounded-full transition-all duration-200 shadow-sm hover:shadow-md ml-2"
                 style={{ 
-                  backgroundColor: '#8B0000', // Dark red
+                  backgroundColor: '#8B0000', // dark red
                   cursor: 'pointer'
                 }}
                 onMouseOver={(e) => {
-                  e.currentTarget.style.backgroundColor = '#A52A2A'; // Slightly lighter red on hover
+                  e.currentTarget.style.backgroundColor = '#A52A2A'; // slightly lighter red on hover
                 }}
                 onMouseOut={(e) => {
                   e.currentTarget.style.backgroundColor = '#8B0000';
