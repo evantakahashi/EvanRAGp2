@@ -6,12 +6,18 @@ import uvicorn
 
 app = FastAPI(title="RAG API", description="API for Retrieval-Augmented Generation")
 
-# Add CORS middleware
+# Add CORS middleware with improved configuration
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Allow all origins in development
+    # Allow specific origins including local development and Vercel domains
+    allow_origins=[
+        #"http://localhost:3000",            # Local Next.js development
+        "https://evan-rag.vercel.app",    # Your main Vercel domain (change this to your actual domain)
+        #"https://evan-ragp2-git-main.vercel.app",  # Git branch specific domain
+        #"https://evanragp2.vercel.app",     # Alternative domain format
+    ],
     allow_credentials=True,
-    allow_methods=["*"],
+    allow_methods=["GET", "POST"],  # Specify the HTTP methods you actually use
     allow_headers=["*"],
 )
 

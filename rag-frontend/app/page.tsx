@@ -20,6 +20,9 @@ export default function Home() {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const typingSpeed = 10; // ms per character
   const [showResumePopup, setShowResumePopup] = useState(false); // state for resume popup
+  
+  // API base URL - use environment variable or fallback to localhost
+  const apiBaseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
 
   // animation keyframes
   const slideInRight = `
@@ -115,7 +118,7 @@ export default function Home() {
   useEffect(() => {
     const checkApiStatus = async () => {
       try {
-        const response = await fetch('http://localhost:8000/health', { 
+        const response = await fetch(`${apiBaseUrl}/health`, { 
           method: 'GET',
           headers: {
             'Accept': 'application/json',
@@ -142,7 +145,7 @@ export default function Home() {
     };
     
     checkApiStatus();
-  }, []);
+  }, [apiBaseUrl]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -159,7 +162,7 @@ export default function Home() {
     setMessages(prev => [...prev, { role: 'assistant', content: 'Thinking...', isThinking: true }]);
     
     try {
-      const response = await fetch('http://localhost:8000/query', {
+      const response = await fetch(`${apiBaseUrl}/query`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
