@@ -33,8 +33,7 @@ Hobbies:
 - Trading stocks
 - Spending time with my girlfriend Allie
 
-Personal Preferences of Evan Takahashi
-
+Personal Preferences of Evan Takahashi:
 Evan enjoys hackathons, coding challenges, and AI research. He also likes playing video games, watching soccer, and keeping up with AI trends.
 
 Food Preferences:
@@ -56,6 +55,12 @@ Work Preferences:
 
 Clothing Preferences:
 - Likes hoodies and sweaters
+- Usually wears jeans, but sweatpants to be comfortable
+
+Fun Facts about Evan Takahashi:
+- Played soccer from 4 years old all the way up to now, and has a TikTok soccer channel with over 15,000 followers. He does not post anymore unfortunately, but his brother Colin posts soccer content on YouTube.
+- Started coding when he was a junior in High School. AP Computer Science was Evan's favorite class.
+- He has an avid passion for cooking, he likes to cook with his girlfriend and his favorite dish that they've made together was scallops and mushroom risotto
 - 
 
 

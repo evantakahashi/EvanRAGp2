@@ -56,10 +56,10 @@ async def ingest_documents(request: IngestRequest, background_tasks: BackgroundT
         chunks_ingested = rag.ingest_documents(request.directory_path)
         return IngestResponse(
             chunks_ingested=chunks_ingested,
-            message=f"Successfully ingested {chunks_ingested} document chunks"
+            message=f"ingested {chunks_ingested} chunks"
         )
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Error ingesting documents: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"error ingesting {str(e)}")
 
 @app.get("/health")
 async def health_check():
