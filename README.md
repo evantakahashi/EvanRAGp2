@@ -1,3 +1,3 @@
 # Evan Portfolio RAG
 
-Hello this is my rag system
+Hello this is my rag
